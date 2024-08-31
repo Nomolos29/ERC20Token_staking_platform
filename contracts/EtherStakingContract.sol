@@ -39,7 +39,6 @@ contract stakeEther {
   error OngoingStake();
   error totalSupplyMaxedOut();
   error invalidInput();
-  error insufficientFunds();
   error invalidTransaction();
   error transactionFailed();
 
@@ -113,7 +112,8 @@ contract stakeEther {
   function withdrawAllFunds() external {
     isSenderAddressZero();
     stakeLocked();
-    require(stakes[msg.sender].stakedAmount > 0, "This account does not exit or balance has been deducted!");
+
+    if (stakes[msg.sender].stakedAmount <= 0) { revert invalidTransaction(); }
 
     uint withdrawalAmount = stakes[msg.sender].stakedAmount + rewardBalance[msg.sender];
     rewardBalance[msg.sender] = 0;
@@ -121,7 +121,7 @@ contract stakeEther {
     (bool sent,) = msg.sender.call{value: withdrawalAmount}("");
 
     
-    require(sent, "Withdrawal failed!");
+    if (sent == false) { revert transactionFailed(); }
 
     stakes[msg.sender].unlockTime = 0;
     emit withdrawAllFundSuccessful(stakes[msg.sender].stakedAmount, rewardBalance[msg.sender], withdrawalAmount);
