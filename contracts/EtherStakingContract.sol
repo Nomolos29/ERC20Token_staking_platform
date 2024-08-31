@@ -53,7 +53,7 @@ contract stakeEther {
   }
 
   function stakeLocked() private view {
-    if (wallets[msg.sender].stakeDuration > block.timestamp) { revert OngoingStake(); }
+    if (stakes[msg.sender].stakeDuration > block.timestamp) { revert OngoingStake(); }
   }
 
   function calculateReward(uint _days) internal {
