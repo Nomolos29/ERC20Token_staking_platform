@@ -34,6 +34,14 @@ contract stakeEther {
   // mapping reward amount to staker's address
   mapping (address => uint) internal rewardBalance;
 
+  // Custom Errors
+  error ZeroAddressDetected();
+  error OngoingStake();
+  error totalSupplyMaxedOut();
+  error invalidInput();
+  error insufficientFunds();
+  error invalidTransaction();
+
   // Events for transactions
   event depositSuccessful(address indexed owner, uint indexed amount, uint indexed lockTime);
   event withdrawalSuccessful(uint indexed amount, address indexed _address);
