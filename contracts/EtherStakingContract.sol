@@ -25,7 +25,7 @@ contract stakeEther {
   constructor() payable {
     // Setting Owner Address to deployer address
     owner = msg.sender;
-    initialContractBalance = address(this).balance;
+    initialContractBalance = msg.value;
   }
 
   // mapping struct by account address
