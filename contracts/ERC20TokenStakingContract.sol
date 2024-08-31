@@ -18,4 +18,10 @@ contract NomCoinPreSale {
     owner = msg.sender;
     tokenAddress = _tokenAddress;
   }
+
+  // mapping struct by account address
+  mapping (address => Wallet) internal wallets;
+
+  // mapping reward amount to staker's address
+  mapping (address => uint) internal rewardBalance;
 }
