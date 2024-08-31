@@ -89,4 +89,36 @@ contract NomCoinPreSale {
     return rewardBalance[msg.sender];
   }
 
+
+  function withdrawStakedAmount() external {
+    isSenderAddressZero();
+    stakeLocked();
+    if (wallets[msg.sender].stakedNomcoins == 0) { revert invalidTransaction(); }
+
+    uint initialStake = wallets[msg.sender].stakedNomcoins;
+
+    wallets[msg.sender].stakedNomcoins -= wallets[msg.sender].stakedNomcoins;
+
+    IERC20(tokenAddress).transfer(msg.sender, initialStake);
+
+    wallets[msg.sender].stakeDuration = 0;
+    emit withdrawalSuccessful(wallets[msg.sender].stakedNomcoins, msg.sender);
+  }
+
+
+  function withdrawStakedAmount() external {
+    isSenderAddressZero();
+    stakeLocked();
+    if (wallets[msg.sender].stakedNomcoins == 0) { revert invalidTransaction(); }
+
+    uint initialStake = wallets[msg.sender].stakedNomcoins;
+
+    wallets[msg.sender].stakedNomcoins -= wallets[msg.sender].stakedNomcoins;
+
+    IERC20(tokenAddress).transfer(msg.sender, initialStake);
+
+    wallets[msg.sender].stakeDuration = 0;
+    emit withdrawalSuccessful(wallets[msg.sender].stakedNomcoins, msg.sender);
+  }
+
 }
