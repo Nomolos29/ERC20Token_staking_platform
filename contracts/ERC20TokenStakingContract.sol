@@ -51,7 +51,7 @@ contract NomCoinMining {
   event withdrawalSuccessful(uint indexed amount, address indexed _address);
   event withdrawAllFundSuccessful(uint indexed stakedAmount, uint indexed reward, uint indexed totalAmount);
 
-  // checkers modifiers
+  // checkers functions
   function isSenderAddressZero() private view {
     if (msg.sender == address(0)) { revert ZeroAddressDetected(); }
   }

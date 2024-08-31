@@ -47,15 +47,13 @@ contract stakeEther {
   event withdrawalSuccessful(uint indexed amount, address indexed _address);
   event withdrawAllFundSuccessful(uint indexed stakedAmount, uint indexed reward, uint indexed totalAmount);
 
-  // checkers modifiers
-  modifier isSenderAddressZero() {
-    require(msg.sender != address(0), "Zero address detected!");
-    _;
+  // checkers functions
+  function isSenderAddressZero() private view {
+    if (msg.sender == address(0)) { revert ZeroAddressDetected(); }
   }
 
-  modifier stakeLocked() {
-    require(stakes[msg.sender].unlockTime <= block.timestamp, "Try again after stake lock time enlapse");
-    _;
+  function stakeLocked() private view {
+    if (wallets[msg.sender].stakeDuration > block.timestamp) { revert OngoingStake(); }
   }
 
   function calculateReward(uint _days) internal {
