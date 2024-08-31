@@ -11,4 +11,8 @@ contract NomCoin is ERC20("NomCoin", "NCOIN") {
     owner = msg.sender;
     _mint(msg.sender, 1000000e18);
   }
+
+  error ZeroAddressDetected();
+  error CannotMintZero()
+  
 }
