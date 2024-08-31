@@ -1,11 +1,11 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 
-const ERC20TokenStakingContractModule = buildModule("ERC20TokenStakingContractModule", (m) => {
+const IERC20Module = buildModule("IERC20Module", (m) => {
 
-  const ERC20Token = m.contract("ERC20TokenStakingContractModule");
+  const IERC20 = m.contract("NomCoin");
 
-  return { ERC20Token };
+  return { IERC20 };
 });
 
-export default ERC20TokenStakingContractModule;
+export default IERC20Module;
