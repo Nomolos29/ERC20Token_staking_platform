@@ -66,7 +66,8 @@ contract stakeEther {
     rewardBalance[msg.sender] += reward;
   }
 
-  function stakeDeposit(uint _days) external payable isSenderAddressZero {
+  function stakeDeposit(uint _days) external payable {
+    isSenderAddressZero();
     require(stakes[msg.sender].unlockTime == 0, "You have an unexpiried staking");
     require(msg.value > 0, "You cannot deposit zero");
     require(_days > 0, "You have to stake for at least one day");
@@ -89,7 +90,9 @@ contract stakeEther {
     return rewardBalance[msg.sender];
   }
 
-  function withdrawStakedAmount() external isSenderAddressZero stakeLocked {
+  function withdrawStakedAmount() external {
+    isSenderAddressZero();
+    stakeLocked();
     require(stakes[msg.sender].stakedAmount > 0, "This account does not exit or balance has been deducted!");
 
     uint initialStake = stakes[msg.sender].stakedAmount;
@@ -103,7 +106,9 @@ contract stakeEther {
     emit withdrawalSuccessful(stakes[msg.sender].stakedAmount, msg.sender);
   }
 
-  function withdrawAllFunds() external isSenderAddressZero stakeLocked {
+  function withdrawAllFunds() external {
+    isSenderAddressZero();
+    stakeLocked();
     require(stakes[msg.sender].stakedAmount > 0, "This account does not exit or balance has been deducted!");
 
     uint withdrawalAmount = stakes[msg.sender].stakedAmount + rewardBalance[msg.sender];
