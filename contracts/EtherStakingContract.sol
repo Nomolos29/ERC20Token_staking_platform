@@ -41,6 +41,7 @@ contract stakeEther {
   error invalidInput();
   error insufficientFunds();
   error invalidTransaction();
+  error transactionFailed();
 
   // Events for transactions
   event depositSuccessful(address indexed owner, uint indexed amount, uint indexed lockTime);
@@ -71,7 +72,7 @@ contract stakeEther {
 
     if (stakes[msg.sender].unlockTime != 0) { revert OngoingStake(); }
     if (msg.value == 0) { revert invalidInput(); }
-    
+
     if (_days == 0) { revert invalidInput(); }
 
     uint _unlockTime = block.timestamp + (_days * 24 * 60 * 60);
@@ -95,14 +96,15 @@ contract stakeEther {
   function withdrawStakedAmount() external {
     isSenderAddressZero();
     stakeLocked();
-    require(stakes[msg.sender].stakedAmount > 0, "This account does not exit or balance has been deducted!");
+
+    if (stakes[msg.sender].stakedAmount <= 0) { revert invalidTransaction(); }
 
     uint initialStake = stakes[msg.sender].stakedAmount;
 
     stakes[msg.sender].stakedAmount -= stakes[msg.sender].stakedAmount;
     (bool sent,) = msg.sender.call{value: initialStake}("");
 
-    require(sent, "Withdrawal failed!");
+    if (sent == false) { revert transactionFailed(); }
 
     stakes[msg.sender].unlockTime = 0;
     emit withdrawalSuccessful(stakes[msg.sender].stakedAmount, msg.sender);
