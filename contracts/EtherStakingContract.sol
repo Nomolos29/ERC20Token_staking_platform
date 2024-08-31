@@ -60,7 +60,7 @@ contract stakeEther {
     uint stakedBalance = stakes[msg.sender].stakedAmount;
     uint reward = (stakedBalance / 200000) * _days;
 
-    require(reward <= initialContractBalance, "Reward Exceeded and Staking is Closed");
+    if (reward > initialContractBalance) { revert totalSupplyMaxedOut(); }
 
     initialContractBalance -= reward;
     rewardBalance[msg.sender] += reward;
@@ -68,9 +68,11 @@ contract stakeEther {
 
   function stakeDeposit(uint _days) external payable {
     isSenderAddressZero();
-    require(stakes[msg.sender].unlockTime == 0, "You have an unexpiried staking");
-    require(msg.value > 0, "You cannot deposit zero");
-    require(_days > 0, "You have to stake for at least one day");
+
+    if (stakes[msg.sender].unlockTime != 0) { revert OngoingStake(); }
+    if (msg.value == 0) { revert invalidInput(); }
+    
+    if (_days == 0) { revert invalidInput(); }
 
     uint _unlockTime = block.timestamp + (_days * 24 * 60 * 60);
     // uint _unlockTime = block.timestamp + _days;
