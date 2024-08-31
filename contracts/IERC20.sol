@@ -14,5 +14,12 @@ contract NomCoin is ERC20("NomCoin", "NCOIN") {
 
   error ZeroAddressDetected();
   error CannotMintZero()
+
+  function mintToken(uint _amount) external {
+    if (msg.sender == address(0)) { revert ZeroAddressDetected(); }
+    if (_amount == 0) { revert CannotMintZero(); }
+    
+    _mint(msg.sender, _amount * 1e18);
+  }
   
 }
