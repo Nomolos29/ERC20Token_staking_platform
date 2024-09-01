@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
-
+pragma solidity ^0.8.20;
+import "hardhat/console.sol";
 // Objective: Write an Ether staking smart contract that allows users to stake Ether for a specified period.
 
 // Requirements:
@@ -11,10 +11,10 @@ pragma solidity 0.8.26;
 // Users should be able to withdraw both their staked Ether and the earned rewards after the staking period ends.
 // Ensure the contract is secure, especially in handling users’ funds and calculating rewards.
 
-contract stakeEther {
+contract EtherStakingContract {
   // initaialising Owner Address
-  address owner;
-  uint initialContractBalance;
+  address public owner;
+  uint public initialContractBalance;
 
   // Creating struct to record and track time to funds
   struct Stake {
@@ -68,11 +68,14 @@ contract stakeEther {
 
   function stakeDeposit(uint _days) external payable {
     isSenderAddressZero();
-
     if (stakes[msg.sender].unlockTime != 0) { revert OngoingStake(); }
-    if (msg.value == 0) { revert invalidInput(); }
+    if(_days == 0){
+      revert invalidInput();
+    }
 
-    if (_days == 0) { revert invalidInput(); }
+    if(msg.value == 0){
+      revert("invalid-input");
+    }
 
     uint _unlockTime = block.timestamp + (_days * 24 * 60 * 60);
     // uint _unlockTime = block.timestamp + _days;
