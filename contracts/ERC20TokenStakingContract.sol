@@ -16,7 +16,7 @@
     // The contract should handle ERC20 token transfers securely and efficiently.
 
 
-contract NomCoinMining {
+contract ERC20TokenStakingContract {
   // State Variables 
   address owner;
   address tokenAddress;

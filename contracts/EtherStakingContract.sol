@@ -56,7 +56,7 @@ contract EtherStakingContract {
     if (stakes[msg.sender].unlockTime > block.timestamp) { revert OngoingStake(); }
   }
 
-  function calculateReward(uint _days) internal {
+  function calculateReward(uint _days) private {
     uint stakedBalance = stakes[msg.sender].stakedAmount;
     uint reward = (stakedBalance / 200000) * _days;
 
@@ -91,7 +91,7 @@ contract EtherStakingContract {
     return stakes[msg.sender].stakedAmount;
   }
 
-  function getStakeReward() external view returns(uint balance) {
+  function getStakeReward() external view returns(uint) {
     return rewardBalance[msg.sender];
   }
 
